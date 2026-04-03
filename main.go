@@ -13,9 +13,12 @@ import (
 
 const promptTemplate = `Generate a git commit message in Conventional Commits format based on the diff below.
 
+STRICT FORMAT:
+<type>(<scope>): <subject>
+- <bullet point 1>
+
 CRITICAL CONSTRAINTS:
 • Output ONLY the raw message text.
-• Format: <type>(<scope>): <subject>
 • Types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert
 • Subject: imperative mood, lowercase start, no period
 • No explanations, no quotes, no markdown, no self "this commit" references, 
