@@ -15,6 +15,21 @@ const promptTemplate = `Generate a git commit message in Conventional Commits fo
 
 STRICT FORMAT:
 <type>(<scope>): <subject>
+
+CRITICAL CONSTRAINTS:
+• Output ONLY the raw message text.
+• Types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert
+• Subject: imperative mood, lowercase start, no period
+• No explanations, no quotes, no markdown, no self "this commit" references, 
+• No backticks, no emojis, no tags, no history references.
+
+Diff:
+%s`
+
+const promptTemplateWithBulletPoints = `Generate a git commit message in Conventional Commits format based on the diff below.
+
+STRICT FORMAT:
+<type>(<scope>): <subject>
 - <bullet point 1>
 
 CRITICAL CONSTRAINTS:
@@ -81,7 +96,19 @@ func generateCommitMessage(ctx context.Context, client *openai.Client) {
 	}
 
 	// 2. Generate AI Message
-	prompt := fmt.Sprintf(promptTemplate, string(diff))
+	arg := ""
+	if len(os.Args) > 1 {
+		arg = os.Args[1]
+	}
+
+	var prompt string
+
+	if arg == "bullet" {
+		prompt = fmt.Sprintf(promptTemplateWithBulletPoints, string(diff))
+	} else {
+		prompt = fmt.Sprintf(promptTemplate, string(diff))
+	}
+
 	resp, err := client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
 		Model: openRouterModel,
 		Messages: []openai.ChatCompletionMessage{
