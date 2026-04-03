@@ -31,12 +31,13 @@ CRITICAL CONSTRAINTS:
 - Do NOT include any introductory or meta-text.
 - Group by feature or fix if multiple changes exist, but keep it brief.
 - Do NOT mention "History" or "Tag" in the response.
+- No backticks, no emojis, no tags, no quotes, no markdown, no self "this tag" references, 
 
 COMMIT HISTORY:
 %s`
 
 // OpenRouter supports many models; pick one that fits your needs
-const openRouterModel = "google/gemma-3-4b-it"
+const openRouterModel = "qwen/qwen3-235b-a22b-2507"
 
 func main() {
 	ctx := context.Background()
@@ -66,7 +67,7 @@ func main() {
 
 func generateCommitMessage(ctx context.Context, client *openai.Client) {
 	// 1. Get Staged Changes
-	diff, err := exec.Command("git", "diff", "--staged").Output()
+	diff, err := exec.Command("git", "diff", "--cached").Output()
 	if err != nil {
 		log.Printf("Error getting git diff: %v", err)
 		return
